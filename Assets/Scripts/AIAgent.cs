@@ -33,18 +33,18 @@ public class AIAgent : MonoBehaviour
         foreach (SteeringBehaviour ohBehave in behaviours)
         {
             // IF behavior is not active
-            if (!isActiveAndEnabled)
+            if (ohBehave.enabled ==false)
             {
                 // CONTINUE to next behavior
                 continue;
             }
             // Append force from behavior (multiply by behaviour weighting)
-            ;
+            force += ohBehave.GetForce();
             // IF forces are too big
             if (force.magnitude > maxVelocity)
             {
                 // Clamp force to the max velocity
-                Mathf.Clamp(force.magnitude, 0, maxVelocity);
+               force =  force.normalized * maxVelocity;
             }
             // EXIT function
             return;
@@ -59,7 +59,7 @@ public class AIAgent : MonoBehaviour
         if (velocity.magnitude > maxVelocity)
         {
             // Clamp velocity
-            Mathf.Clamp(velocity.magnitude, 0, maxVelocity);
+            velocity = velocity.normalized * maxVelocity;
         }
         // IF velocity is not zero
         if(velocity.magnitude != 0)
@@ -70,7 +70,7 @@ public class AIAgent : MonoBehaviour
                 // Append transform position by velocity
                 transform.position += velocity;
                 // transform rotate by velocity
-                transform.Rotate(velocity);
+                transform.rotation = Quaternion.LookRotation(velocity);
             }
         }
 

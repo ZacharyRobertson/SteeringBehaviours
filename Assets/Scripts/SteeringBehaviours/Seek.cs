@@ -6,10 +6,11 @@ public class Seek : SteeringBehaviour
 {
     public Transform target;
     public float stoppingDistance = 0f;
+    public Vector3 desiredForce;
 
     public override Vector3 GetForce()
     {
-        Vector3 desiredForce;
+        
 
         // IF there is no target, then return force
         if (target == null)
@@ -17,7 +18,7 @@ public class Seek : SteeringBehaviour
             return force;
         }
         // SET desiredForce to direction from target to position
-        desiredForce = transform.position - target.position;
+        desiredForce = target.position - transform.position;
         // SET desiredForce y to zero
         desiredForce.y = 0;
 
