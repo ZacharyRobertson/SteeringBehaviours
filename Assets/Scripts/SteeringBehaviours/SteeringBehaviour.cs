@@ -5,17 +5,18 @@ using UnityEngine;
 public class SteeringBehaviour : MonoBehaviour
 {
     public float weighting = 7.5f;
-    public Vector3 force;
-    [HideInInspector] public AIAgent owner;
     
+    [HideInInspector]
+    public AIAgent owner;
+
     // Use this for initialization
-    void Awake()
+    void Start()
     {
         owner = GetComponent<AIAgent>();
     }
-    
+
     public virtual Vector3 GetForce()
     {
         return Vector3.zero;
-    }    
+    }
 }
