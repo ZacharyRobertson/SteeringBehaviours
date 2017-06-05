@@ -8,14 +8,12 @@ public class AIAgent : MonoBehaviour
     public Vector3 velocity;
     public float maxVelocity = 100f;
 
-    private List<SteeringBehaviour> behaviours;
+    private SteeringBehaviour[] behaviours;
 
     // Use this for initialization
     void Start()
     {
-        // This is Scott
-        SteeringBehaviour[] ohBehave = GetComponents<SteeringBehaviour>();
-        behaviours = new List<SteeringBehaviour>(ohBehave);
+        behaviours = GetComponents<SteeringBehaviour>();
     }
 
     // Update is called once per frame
@@ -27,25 +25,27 @@ public class AIAgent : MonoBehaviour
 
     void ComputeForces()
     {
-        // Reset the force before computing
-        force = Vector3.zero;
-        // FOR each behaviour attached to AIAgent
-        foreach (SteeringBehaviour ohBehave in behaviours)
+        // SET force to zero
+        force = Vector3.zero; // When you create a variable in a function,
+                              // It only exists within that function. 
+                              // FOR i = 0 to behaviours length
+        for (int i = 0; i < behaviours.Length; i++)
         {
-            // IF behavior is not active
-            if (!ohBehave.enabled)
+            SteeringBehaviour behaviour = behaviours[i];
+            // IF behaviour is not enabled
+            if (!behaviour.enabled)
             {
-                // CONTINUE to next behavior
+                // CONTINUE
                 continue;
             }
-            // Append force from behavior (multiply by behaviour weighting)
-            force += ohBehave.GetForce();
-            // IF forces are too big
+            // SET force to force + behaviour's force
+            force += behaviour.GetForce();
+            // IF force is greater than maxVelocity    
             if (force.magnitude > maxVelocity)
             {
-                // Clamp force to the max velocity
+                // SET force to force normalized x maxVelocity
                 force = force.normalized * maxVelocity;
-                // EXIT function
+                // BREAK
                 break;
             }
         }
@@ -53,22 +53,21 @@ public class AIAgent : MonoBehaviour
 
     void ApplyVelocity()
     {
-        // Append force to velocity with deltaTime
+        // SET velocity to velocity + force x delta time
         velocity += force * Time.deltaTime;
-        // IF velocity is greater than max vel
+        // IF velocity is greater than maxVelocity 
         if (velocity.magnitude > maxVelocity)
         {
-            // Clamp velocity
+            // SET velocity to velocity normalized x maxVelocity
             velocity = velocity.normalized * maxVelocity;
         }
-        // IF velocity is not zero
+        // IF velocity is greater than zero
         if (velocity != Vector3.zero)
         {
-            // Append transform position by velocity
+            // SET position to position + velocity x delta time
             transform.position += velocity * Time.deltaTime;
-            // transform rotate by velocity
+            // SET rotation to Quaternion.LookRotation velocity
             transform.rotation = Quaternion.LookRotation(velocity);
         }
-
     }
 }
