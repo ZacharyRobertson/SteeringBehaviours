@@ -72,9 +72,9 @@ public class SpawnerXML : MonoBehaviour
             // set item to objects [i]
             GameObject item = objects[i];
             // Set spawner's position to position
-            spawnerData.position = transform.position;
+            spawnerData.position = item.transform.position;
             // Set spawner's rotation to rotation
-            spawnerData.rotation = transform.rotation;
+            spawnerData.rotation = item.transform.rotation;
             // Set data.spawners[i] = spawnerData
             data.spawners[i] = spawnerData;
         }
@@ -109,7 +109,7 @@ public class SpawnerXML : MonoBehaviour
         // Set fullPath to application.dataPath + "/" + fileName + ".xml";
         fullPath = Application.dataPath + "/" + fileName + ".xml";
         // If File exists at fullPath
-        if(fullPath != null)
+        if(File.Exists(fullPath))
         {
             // Set Data to Load(fullPath)
             data = Load(fullPath);
